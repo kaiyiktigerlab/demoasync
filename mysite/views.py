@@ -1,7 +1,7 @@
 import time
 import httpx
 import asyncio
-
+import concurrent
 from django.http import JsonResponse
 
 
@@ -47,4 +47,18 @@ def api_aggregated_sync(request):
         "aggregated_responses": responses,
         "debug_message": f"fetch executed in {elapsed:0.2f} seconds.",
     }
+    return JsonResponse(result)
+
+
+def perform_task(url):
+    r = httpx.get(url)
+    return r.json()
+
+
+def api_aggregated_sync_threadpool(request):
+    urls = get_api_urls(num=10)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+        for url in urls:
+            result = executor.submit(perform_task, url)
+    print(result)
     return JsonResponse(result)

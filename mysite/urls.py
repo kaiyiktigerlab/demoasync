@@ -18,7 +18,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+
+    # path('admin/', admin.site.urls),
     path("api/", views.api),
     path("api/aggregated/", views.api_aggregated),
     path("api/aggregated/sync/", views.api_aggregated_sync),
